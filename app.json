@@ -2,6 +2,20 @@
   "expo": {
     "name": "porquinho",
     "slug": "porquinho",
-    "version": "1.0.0"
+    "scheme": "porquinho",
+    "version": "1.0.0",
+    "android": {
+      "package": "com.fastsoftware.porquinho.app",
+      "edgeToEdgeEnabled": true,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#3D44CD"
+      }
+    },
+    "ios": {
+      "bundleIdentifier": "com.fastsoftware.porquinho.app",
+      "icon": "./assets/ios-icon.png"
+    },
+    "plugins": ["expo-router"]
   }
 }

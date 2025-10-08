@@ -1,4 +1,4 @@
-package com.porquinho
+package com.fastsoftware.porquinho.app
 
 import android.app.Application
 import android.content.res.Configuration
