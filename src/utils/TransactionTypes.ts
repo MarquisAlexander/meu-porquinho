@@ -1,4 +1,4 @@
-export enum TransactionTyper {
+export enum TransactionTypes {
   Input = "input",
   Output = "output",
 }

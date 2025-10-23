@@ -5,7 +5,7 @@ import { Progress } from "@/components/Progress";
 import { List } from "@/components/List";
 import { Transaction, TransactionProps } from "@/components/Transaction";
 
-import { TransactionTyper } from "@/utils/TransactionTypes";
+import { TransactionTypes } from "@/utils/TransactionTypes";
 import { Button } from "@/components/Button";
 
 const details = {
@@ -20,21 +20,21 @@ const transactions: TransactionProps[] = [
     value: "R$ 300,00",
     date: "12/04/25",
     description: "CDB de 110% do banco XP",
-    type: TransactionTyper.Input,
+    type: TransactionTypes.Input,
   },
   {
     id: "2",
     value: "R$ 50,00",
     date: "12/04/25",
     description: "",
-    type: TransactionTyper.Input,
+    type: TransactionTypes.Input,
   },
   {
     id: "3",
     value: "R$ 200,00",
     date: "12/04/25",
     description: "CDB de 110% do banco XP",
-    type: TransactionTyper.Output,
+    type: TransactionTypes.Output,
   },
 ];
 
