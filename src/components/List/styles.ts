@@ -4,8 +4,6 @@ import { colors, fontFamily } from "@/theme";
 export const styles = StyleSheet.create({
   container: { flex: 1 },
   listContent: {
-    gap: 16,
-    paddingTop: 16,
     paddingBottom: 72,
   },
   title: {
