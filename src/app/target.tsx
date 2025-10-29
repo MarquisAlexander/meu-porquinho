@@ -3,7 +3,7 @@ import { PageHeader } from "@/components/PageHeader";
 import { Input } from "@/components/Input";
 import { Button } from "@/components/Button";
 import { CurrencyInput } from "@/components/CurrencyInput";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
 import { useTargetDatabase } from "@/database/useTargetDatabase";
 
@@ -26,9 +26,21 @@ export default function Target() {
     setIsProcessing(true);
 
     if (params.id) {
-      // update
+      update();
     } else {
       create();
+    }
+  }
+
+  async function update() {
+    try {
+      await targetDatabase.update({ id: Number(params.id), name, amount });
+      Alert.alert("Sucesso", "Meta atualizada com sucesso!", [
+        { text: "OK", onPress: () => router.back() },
+      ]);
+    } catch (error) {
+      Alert.alert("Erro", "Não foi possível atualizar a meta.");
+      setIsProcessing(false);
     }
   }
 
@@ -46,6 +58,22 @@ export default function Target() {
       setIsProcessing(false);
     }
   }
+
+  async function fetchDetails(id: number) {
+    try {
+      const response = await targetDatabase.show(id);
+      setName(response.name);
+      setAmount(response.amount);
+    } catch (error) {
+      Alert.alert("Erro", "Não foi possível carregar os detalhes da meta.");
+    }
+  }
+
+  useEffect(() => {
+    if (params.id) {
+      fetchDetails(Number(params.id));
+    }
+  }, [params.id]);
 
   return (
     <View style={{ flex: 1, padding: 24 }}>

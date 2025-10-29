@@ -85,7 +85,7 @@ export default function Index() {
         title={details.name}
         rightButton={{
           icon: "edit",
-          onPress: () => {},
+          onPress: () => router.navigate(`/target?id=${params.id}`),
         }}
       />
 
