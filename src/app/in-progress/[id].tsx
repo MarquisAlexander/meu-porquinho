@@ -11,32 +11,11 @@ import { useTargetDatabase } from "@/database/useTargetDatabase";
 import { useCallback, useState } from "react";
 import { numberToCurrency } from "@/utils/numberToCurrency";
 import { Loading } from "@/components/Loading";
-
-const transactions: TransactionProps[] = [
-  {
-    id: "1",
-    value: "R$ 300,00",
-    date: "12/04/25",
-    description: "CDB de 110% do banco XP",
-    type: TransactionTypes.Input,
-  },
-  {
-    id: "2",
-    value: "R$ 50,00",
-    date: "12/04/25",
-    description: "",
-    type: TransactionTypes.Input,
-  },
-  {
-    id: "3",
-    value: "R$ 200,00",
-    date: "12/04/25",
-    description: "CDB de 110% do banco XP",
-    type: TransactionTypes.Output,
-  },
-];
+import { useTransactionsDatabase } from "@/database/useTransactionsDatabase";
+import dayjs from "dayjs";
 
 export default function Index() {
+  const [transactions, setTransactions] = useState<TransactionProps[]>([]);
   const [isFetching, setIsFetching] = useState(true);
   const [details, setDetails] = useState({
     name: "",
@@ -46,8 +25,9 @@ export default function Index() {
   });
   const params = useLocalSearchParams<{ id: string }>();
   const targetDatabase = useTargetDatabase();
+  const transactionsDatabase = useTransactionsDatabase();
 
-  async function fetchDetails() {
+  async function fetchTargetDetails() {
     try {
       const response = await targetDatabase.show(Number(params.id));
       setDetails({
@@ -62,11 +42,34 @@ export default function Index() {
     }
   }
 
+  async function fetchTransitions() {
+    try {
+      const response = await transactionsDatabase.listByTargetId(
+        Number(params.id),
+      );
+
+      setTransactions(
+        response.map((item) => ({
+          id: String(item.id),
+          value: numberToCurrency(item.amount),
+          date: dayjs(item.created_at).format("DD/MM/YYYY [às] HH:mm"),
+          description: item.observation,
+          type:
+            item.amount < 0 ? TransactionTypes.Output : TransactionTypes.Input,
+        })),
+      );
+    } catch (error) {
+      Alert.alert("Erro", "Não foi possível carregar as transações.");
+      console.log(error);
+    }
+  }
+
   async function fetchData() {
-    const fetchDetailsPromise = fetchDetails();
+    const fetchDetailsPromise = fetchTargetDetails();
+    const fetchTransitionsPromise = fetchTransitions();
     setIsFetching(false);
 
-    await Promise.all([fetchDetailsPromise]);
+    await Promise.all([fetchDetailsPromise, fetchTransitionsPromise]);
   }
 
   useFocusEffect(
