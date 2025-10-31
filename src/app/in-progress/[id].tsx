@@ -72,6 +72,26 @@ export default function Index() {
     await Promise.all([fetchDetailsPromise, fetchTransitionsPromise]);
   }
 
+  function handleTransactionRemove(id: string) {
+    Alert.alert("Remover", "Deseja realmente remover?", [
+      {
+        text: "Não",
+        style: "cancel",
+      },
+      { text: "Sim", onPress: () => transactionRemove(id) },
+    ]);
+  }
+
+  async function transactionRemove(id: string) {
+    try {
+      await transactionsDatabase.remove(Number(id));
+      fetchData();
+      Alert.alert("Transação", "Transação removida com sucesso!");
+    } catch (error) {
+      Alert.alert("Erro", "Não foi possível remover a transação");
+    }
+  }
+
   useFocusEffect(
     useCallback(() => {
       fetchData();
@@ -98,7 +118,10 @@ export default function Index() {
         title="Transações"
         data={transactions}
         renderItem={({ item }) => (
-          <Transaction data={item} onRemove={() => {}} />
+          <Transaction
+            data={item}
+            onRemove={() => handleTransactionRemove(item.id)}
+          />
         )}
         emptyMessage="Nenhuma transação. Toque em nova transação para guardar seu primeiro dinheiro aqui"
       />
