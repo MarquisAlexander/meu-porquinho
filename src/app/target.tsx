@@ -1,4 +1,4 @@
-import { Alert, View } from "react-native";
+import { Alert, StatusBar, View } from "react-native";
 import { PageHeader } from "@/components/PageHeader";
 import { Input } from "@/components/Input";
 import { Button } from "@/components/Button";
@@ -100,6 +100,7 @@ export default function Target() {
 
   return (
     <View style={{ flex: 1, padding: 24 }}>
+      <StatusBar barStyle="dark-content" />
       <PageHeader
         title="Meta"
         subtitle="Economize para alcançar sua meta financeira"
